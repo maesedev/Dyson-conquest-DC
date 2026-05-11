@@ -1,0 +1,31 @@
+# Unity generated
+Library/
+Temp/
+Obj/
+Build/
+Builds/
+Logs/
+UserSettings/
+MemoryCaptures/
+
+# Unity cache / VS / Rider
+.vs/
+.idea/
+*.csproj
+*.sln
+*.userprefs
+*.pidb
+*.suo
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Claude Code
+claude.md
+.claude/
