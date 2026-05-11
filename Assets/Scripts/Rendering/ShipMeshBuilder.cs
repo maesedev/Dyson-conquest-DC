@@ -15,7 +15,7 @@ namespace DysonHarvest
                 return;
             }
 
-            GetComponent<MeshFilter>().mesh = BuildArrowMesh(data.meshScale);
+            GetComponent<MeshFilter>().mesh = BuildArrowMesh(3f);
 
             var mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
             mat.color = data.shipColor;

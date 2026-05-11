@@ -14,7 +14,5 @@ namespace DysonHarvest
         public bool canExtract = false;
         public bool isDysonModule = false;
         public Color shipColor = Color.cyan;
-        [Range(0.5f, 5f)]
-        public float meshScale = 3f;
     }
 }
