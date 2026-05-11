@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace DysonHarvest
 {
@@ -39,10 +40,14 @@ namespace DysonHarvest
                 launchPanel.Initialize(this, launchableShips);
         }
 
-        private void OnMouseDown()
+        private void Update()
         {
-            if (GameManager.Instance.CurrentPhase != GamePhase.Planning) return;
-            launchPanel?.Show();
+            if (Mouse.current == null || !Mouse.current.leftButton.wasPressedThisFrame) return;
+            if (GameManager.Instance == null || GameManager.Instance.CurrentPhase != GamePhase.Planning) return;
+
+            Ray ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+            if (Physics.Raycast(ray, out RaycastHit hit, 1000f) && hit.collider.gameObject == gameObject)
+                launchPanel?.Show();
         }
 
         public void LaunchShip(ShipDataSO data)
