@@ -21,6 +21,8 @@ MemoryCaptures/
 *.opendb
 *.VC.db
 
+# Recovery
+Assets/_recovery
 # OS
 .DS_Store
 Thumbs.db
