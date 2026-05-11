@@ -45,23 +45,19 @@ namespace DysonHarvest
 
             for (int i = 0; i < count; i++)
             {
+                // Ghost sphere: 45% the size of the real planet so it's clearly smaller
                 var ghost = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                 ghost.name = $"{orbit.data.planetName}_Ghost_{i + 1}";
-                ghost.transform.localScale = Vector3.one * orbit.data.planetScale;
+                ghost.transform.localScale = Vector3.one * orbit.data.planetScale * 0.45f;
                 Destroy(ghost.GetComponent<Collider>());
 
+                // Mix planet color toward white progressively (further = more white = more faded)
                 float t = (float)i / Mathf.Max(count - 1, 1);
-                float alpha = Mathf.Lerp(0.35f, 0.10f, t);
+                Color c = Color.Lerp(baseColor, Color.white, Mathf.Lerp(0.4f, 0.8f, t));
 
                 var mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
-                // URP Lit transparent surface
-                mat.SetFloat("_Surface", 1f);          // 1 = Transparent
-                mat.SetFloat("_Blend", 0f);             // Alpha blend
-                mat.renderQueue = 3000;
-                mat.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
-                Color c = baseColor;
-                c.a = alpha;
                 mat.color = c;
+                mat.SetColor("_BaseColor", c);
 
                 ghost.GetComponent<MeshRenderer>().material = mat;
                 _ghosts[i] = ghost;

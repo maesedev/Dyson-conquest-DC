@@ -19,7 +19,7 @@ namespace DysonHarvest
 
         private void Start()
         {
-            _energySystem = FindFirstObjectByType<EnergySystem>();
+            _energySystem = FindAnyObjectByType<EnergySystem>();
         }
 
         public void Activate()

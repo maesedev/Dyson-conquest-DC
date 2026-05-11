@@ -15,7 +15,7 @@ namespace DysonHarvest
 
         private void Start()
         {
-            _pulseController = FindFirstObjectByType<PulseController>();
+            _pulseController = FindAnyObjectByType<PulseController>();
             if (_pulseController != null)
                 _pulseController.OnPulse += OnPulse;
 

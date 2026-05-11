@@ -30,13 +30,18 @@ namespace DysonHarvest
 
         private void Start()
         {
-            _pulseController = FindFirstObjectByType<PulseController>();
-            _energySystem = FindFirstObjectByType<EnergySystem>();
+            if (data == null)
+            {
+                Debug.LogError($"[ShipController] '{gameObject.name}' necesita un ShipDataSO asignado en el Inspector.", this);
+                return;
+            }
+
+            _pulseController = FindAnyObjectByType<PulseController>();
+            _energySystem = FindAnyObjectByType<EnergySystem>();
 
             if (_pulseController != null)
                 _pulseController.OnPulse += OnPulse;
 
-            // Register extractor ships immediately
             if (data.canExtract)
                 _energySystem?.RegisterExtractor(this);
         }
@@ -46,7 +51,7 @@ namespace DysonHarvest
             if (_pulseController != null)
                 _pulseController.OnPulse -= OnPulse;
 
-            if (data.canExtract)
+            if (data != null && data.canExtract)
                 _energySystem?.UnregisterExtractor(this);
         }
 

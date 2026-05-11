@@ -9,6 +9,12 @@ namespace DysonHarvest
 
         private void Awake()
         {
+            if (data == null)
+            {
+                Debug.LogError($"[ShipMeshBuilder] '{gameObject.name}' necesita un ShipDataSO asignado en el Inspector.", this);
+                return;
+            }
+
             GetComponent<MeshFilter>().mesh = BuildArrowMesh(data.meshScale);
 
             var mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
