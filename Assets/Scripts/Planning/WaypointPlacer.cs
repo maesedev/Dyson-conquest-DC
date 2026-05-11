@@ -96,6 +96,11 @@ namespace DysonHarvest
             _waypointMarkers.Clear();
         }
 
+        public void ForceSelect(ShipController ship)
+        {
+            SelectedShip = ship;
+        }
+
         public void Deselect()
         {
             SelectedShip = null;

@@ -10,6 +10,7 @@ namespace DysonHarvest
         public float zoomMin = 5f;
         public float zoomMax = 80f;
         public float zoomSensitivity = 4f;
+        public float zoomDefault = 55f;
 
         [Header("Pan")]
         public float panSensitivity = 0.05f;
@@ -22,7 +23,7 @@ namespace DysonHarvest
         {
             _cam = GetComponent<Camera>();
             _cam.orthographic = true;
-            // Ensure top-down orientation
+            _cam.orthographicSize = zoomDefault;
             transform.rotation = Quaternion.Euler(90f, 0f, 0f);
         }
 

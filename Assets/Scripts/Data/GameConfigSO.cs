@@ -17,7 +17,12 @@ namespace DysonHarvest
         [Header("Gravity")]
         public float defaultGravityRadius = 8f;
 
+        [Header("Portal")]
+        public float portalOrbitRadius = 22f;
+        public float portalAngleDeg = 90f;
+
         [Header("Victory")]
         public float dysonModuleSlotRadius = 5f;
+        public int dysonModulesRequired = 3;
     }
 }

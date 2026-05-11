@@ -26,8 +26,13 @@ namespace DysonHarvest
 
         private void OnPulse()
         {
-            // Portal entropy cost
             Consume(config.portalEntropyPerPulse);
+
+            if (energyChannel.Value <= 0f)
+            {
+                GameManager.Instance.TriggerGameOver();
+                return;
+            }
 
             // Extraction income from ships anchored on extractable planets
             foreach (var ship in _activeExtractors)
