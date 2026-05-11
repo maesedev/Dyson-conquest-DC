@@ -13,10 +13,19 @@ namespace DysonHarvest
 
         public void Activate(PlanetOrbit planet)
         {
-            // Re-parent under the planet; Unity keeps world position intact
             transform.SetParent(planet.transform, worldPositionStays: true);
-            // Snap onto the planet surface plane (Y=0 relative to planet)
             Vector3 local = transform.localPosition;
+
+            // If the ship is inside or too close to the planet center, push it to just outside the surface
+            float surfaceDist = planet.data.planetScale * 0.5f + 1f;
+            Vector2 flatOffset = new Vector2(local.x, local.z);
+            if (flatOffset.magnitude < surfaceDist)
+            {
+                // Default anchor position: just in front of the planet along +Z
+                local.x = 0f;
+                local.z = surfaceDist;
+            }
+
             local.y = 0f;
             transform.localPosition = local;
         }

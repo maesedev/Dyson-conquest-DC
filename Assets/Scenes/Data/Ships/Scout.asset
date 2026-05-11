@@ -20,4 +20,4 @@ MonoBehaviour:
   canExtract: 0
   isDysonModule: 0
   shipColor: {r: 1, g: 1, b: 1, a: 1}
-  meshScale: 0.6
+  meshScale: 3
