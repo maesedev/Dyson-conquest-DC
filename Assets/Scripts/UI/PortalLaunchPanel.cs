@@ -10,6 +10,7 @@ namespace DysonHarvest
     public class PortalLaunchPanel : MonoBehaviour
     {
         private PortalController _portal;
+        private static Sprite _roundedSprite;
 
         public void Initialize(PortalController portal, ShipDataSO[] ships)
         {
@@ -64,18 +65,20 @@ namespace DysonHarvest
             rt.anchoredPosition = new Vector2(0, yPos);
 
             var img = btnGO.AddComponent<Image>();
-            Color dark = data.shipColor * 0.25f;
-            dark.a = 0.92f;
+            img.sprite = GetRoundedSprite();
+            img.type = Image.Type.Sliced;
+            Color dark = data.shipColor * 0.3f;
+            dark.a = 1f;
             img.color = dark;
 
             var btn = btnGO.AddComponent<Button>();
             btn.targetGraphic = img;
             var colors = btn.colors;
-            colors.highlightedColor = data.shipColor * 0.5f;
-            colors.pressedColor = data.shipColor * 0.7f;
+            colors.normalColor = Color.white;
+            colors.highlightedColor = new Color(1.2f, 1.2f, 1.2f);
+            colors.pressedColor = new Color(0.8f, 0.8f, 0.8f);
             btn.colors = colors;
 
-            // Label
             var labelGO = new GameObject("Label");
             labelGO.transform.SetParent(btnGO.transform, false);
             var labelRT = labelGO.AddComponent<RectTransform>();
@@ -102,7 +105,9 @@ namespace DysonHarvest
             rt.anchoredPosition = new Vector2(0, yPos);
 
             var img = btnGO.AddComponent<Image>();
-            img.color = new Color(0.3f, 0.3f, 0.3f, 0.8f);
+            img.sprite = GetRoundedSprite();
+            img.type = Image.Type.Sliced;
+            img.color = new Color(0.25f, 0.25f, 0.25f, 1f);
 
             var btn = btnGO.AddComponent<Button>();
             btn.targetGraphic = img;
@@ -119,6 +124,46 @@ namespace DysonHarvest
             tmp.alignment = TextAlignmentOptions.Center;
             tmp.fontSize = 20;
             tmp.color = Color.white;
+        }
+
+        // Generates a white rounded-rect sprite at runtime — no external asset needed.
+        // The border Vector4 enables 9-slice so it scales without distortion.
+        private static Sprite GetRoundedSprite()
+        {
+            if (_roundedSprite != null) return _roundedSprite;
+
+            const int size = 64, radius = 12;
+            var tex = new Texture2D(size, size, TextureFormat.RGBA32, false);
+            var pixels = new Color32[size * size];
+
+            for (int y = 0; y < size; y++)
+                for (int x = 0; x < size; x++)
+                    pixels[y * size + x] = InsideRoundedRect(x, y, size, size, radius)
+                        ? new Color32(255, 255, 255, 255)
+                        : new Color32(0, 0, 0, 0);
+
+            tex.SetPixels32(pixels);
+            tex.Apply();
+
+            _roundedSprite = Sprite.Create(
+                tex,
+                new Rect(0, 0, size, size),
+                new Vector2(0.5f, 0.5f),
+                100f, 0,
+                SpriteMeshType.FullRect,
+                new Vector4(radius, radius, radius, radius));
+
+            return _roundedSprite;
+        }
+
+        private static bool InsideRoundedRect(int x, int y, int w, int h, int r)
+        {
+            if (x >= r && x < w - r) return true;
+            if (y >= r && y < h - r) return true;
+            int cx = x < r ? r : w - r - 1;
+            int cy = y < r ? r : h - r - 1;
+            float dx = x - cx, dy = y - cy;
+            return dx * dx + dy * dy <= (float)r * r;
         }
     }
 }
