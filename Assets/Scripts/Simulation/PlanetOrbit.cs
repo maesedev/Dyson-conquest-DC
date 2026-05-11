@@ -11,14 +11,8 @@ namespace DysonHarvest
         [HideInInspector]
         public float currentAngleDeg;
 
-        private PulseController _pulseController;
-
         private void Start()
         {
-            _pulseController = FindAnyObjectByType<PulseController>();
-            if (_pulseController != null)
-                _pulseController.OnPulse += OnPulse;
-
             currentAngleDeg = data.startingAngleDeg;
             ApplyPosition();
 
@@ -26,17 +20,13 @@ namespace DysonHarvest
             GetComponent<MeshRenderer>().material.color = data.planetColor;
         }
 
-        private void OnDestroy()
+        private void Update()
         {
-            if (_pulseController != null)
-                _pulseController.OnPulse -= OnPulse;
-        }
+            var gm = GameManager.Instance;
+            if (gm == null || gm.CurrentPhase != GamePhase.Execution || gm.GameEnded) return;
 
-        private void OnPulse()
-        {
-            currentAngleDeg += data.angularSpeedDeg;
-            if (currentAngleDeg >= 360f)
-                currentAngleDeg -= 360f;
+            currentAngleDeg += data.angularSpeedDeg * Time.deltaTime;
+            if (currentAngleDeg >= 360f) currentAngleDeg -= 360f;
             ApplyPosition();
         }
 
