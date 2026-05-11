@@ -20,4 +20,4 @@ MonoBehaviour:
   extractionYieldPerPulse: 5
   isHostile: 0
   planetColor: {r: 1, g: 0, b: 0.7787354, a: 1}
-  planetScale: 1.5
+  planetScale: 1.94

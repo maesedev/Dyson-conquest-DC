@@ -51,11 +51,20 @@ namespace DysonHarvest
                 ghost.transform.localScale = Vector3.one * orbit.data.planetScale * 0.45f;
                 Destroy(ghost.GetComponent<Collider>());
 
-                // Mix planet color toward white progressively (further = more white = more faded)
+                // Alpha gradient: ghost 1 = 50%, ghost N = 25%
                 float t = (float)i / Mathf.Max(count - 1, 1);
-                Color c = Color.Lerp(baseColor, Color.white, Mathf.Lerp(0.4f, 0.8f, t));
+                float alpha = Mathf.Lerp(0.20f, 0.10f, t);
+                Color c = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
 
-                var mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+                var mat = new Material(Shader.Find("Universal Render Pipeline/Unlit"));
+                mat.SetFloat("_Surface", 1f);
+                mat.SetFloat("_Blend", 0f);
+                mat.SetFloat("_SrcBlend", 5f);
+                mat.SetFloat("_DstBlend", 10f);
+                mat.SetFloat("_ZWrite", 0f);
+                mat.SetOverrideTag("RenderType", "Transparent");
+                mat.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
+                mat.renderQueue = 3000;
                 mat.color = c;
                 mat.SetColor("_BaseColor", c);
 
