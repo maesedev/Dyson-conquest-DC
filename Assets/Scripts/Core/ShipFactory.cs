@@ -27,10 +27,15 @@ namespace DysonHarvest
             mesh.data = data;
             controller.data = data;
 
-            // Collider for click selection
+            // Collider for click selection and trigger detection
             var col = go.AddComponent<SphereCollider>();
             col.radius = 2.5f;
             col.isTrigger = false;
+
+            // Rigidbody kinematic: required for OnTriggerEnter to fire on planet gravity zones
+            var rb = go.AddComponent<Rigidbody>();
+            rb.isKinematic = true;
+            rb.useGravity = false;
 
             // Activate now — Awake() runs for all components with data set
             go.SetActive(true);

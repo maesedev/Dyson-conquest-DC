@@ -17,5 +17,8 @@ MonoBehaviour:
   startingEnergy: 100
   portalEntropyPerPulse: 3
   emergencyOrderMultiplier: 2.5
-  defaultGravityRadius: 8
+  defaultGravityRadius: 2
+  portalOrbitRadius: 22
+  portalAngleDeg: 90
   dysonModuleSlotRadius: 5
+  dysonModulesRequired: 3

@@ -15,7 +15,7 @@ namespace DysonHarvest
         public float emergencyOrderMultiplier = 2.5f;
 
         [Header("Gravity")]
-        public float defaultGravityRadius = 8f;
+        public float defaultGravityRadius = 2f;
 
         [Header("Portal")]
         public float portalOrbitRadius = 22f;

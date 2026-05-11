@@ -55,20 +55,22 @@ namespace DysonHarvest
                 _energySystem?.UnregisterExtractor(this);
         }
 
+        private void Update()
+        {
+            if (CurrentMode == ShipMode.Flight && insideGravityZone
+                && !_flightMode.HasExplicitOrder && gravityZoneRef != null)
+            {
+                SetMode(ShipMode.Anchor, gravityZoneRef.ParentOrbit);
+            }
+        }
+
         private void OnPulse()
         {
             if (CurrentMode == ShipMode.Flight)
             {
                 _flightMode.OnPulse();
-                EvaluateGravityCapture();
                 _flightMode.ClearExplicitOrderFlag();
             }
-        }
-
-        private void EvaluateGravityCapture()
-        {
-            if (insideGravityZone && !_flightMode.HasExplicitOrder && gravityZoneRef != null)
-                SetMode(ShipMode.Anchor, gravityZoneRef.ParentOrbit);
         }
 
         // --- Public order API ---
