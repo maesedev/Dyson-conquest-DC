@@ -8,9 +8,9 @@ namespace DysonHarvest
     {
         [Header("Zoom")]
         public float zoomMin = 5f;
-        public float zoomMax = 80f;
+        public float zoomMax = 100f;
         public float zoomSensitivity = 4f;
-        public float zoomDefault = 55f;
+        public float zoomDefault = 40f;
 
         [Header("Pan")]
         public float panSensitivity = 0.05f;

@@ -14,18 +14,19 @@ namespace DysonHarvest
             var lr = GetComponent<LineRenderer>();
             lr.loop = true;
             lr.positionCount = segments;
-            lr.startWidth = 0.15f;
-            lr.endWidth = 0.15f;
+            lr.startWidth = 0.5f;
+            lr.endWidth = 0.5f;
             lr.useWorldSpace = true;
 
-            Color c = data.planetColor;
-            c.a = 0.25f;
+            // Use a dimmed opaque color (avoids transparency shader setup issues)
+            Color c = data.planetColor * 0.35f;
+            c.a = 1f;
             lr.startColor = c;
             lr.endColor = c;
 
-            // Use URP unlit so the line renders correctly without lighting
-            lr.material = new Material(Shader.Find("Universal Render Pipeline/Unlit"));
-            lr.material.color = c;
+            var mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+            mat.color = c;
+            lr.material = mat;
 
             for (int i = 0; i < segments; i++)
             {

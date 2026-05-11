@@ -10,7 +10,8 @@ namespace DysonHarvest
         private readonly Queue<Vector3> _waypoints = new();
         private bool _isActive;
 
-        public bool HasExplicitOrder { get; private set; }
+        // True as long as the ship has a destination to reach — prevents gravity capture mid-flight
+        public bool HasExplicitOrder => _isActive && _waypoints.Count > 0;
         public bool HasWaypoints => _waypoints.Count > 0;
 
         private void Awake()
@@ -61,26 +62,20 @@ namespace DysonHarvest
         public void Activate()
         {
             _isActive = true;
-            HasExplicitOrder = true;
         }
 
         public void Deactivate()
         {
             _isActive = false;
             _waypoints.Clear();
-            HasExplicitOrder = false;
         }
 
         public void SetDestination(Vector3 worldPos)
         {
             _waypoints.Clear();
             _waypoints.Enqueue(worldPos);
-            HasExplicitOrder = true;
         }
 
-        public void ClearExplicitOrderFlag()
-        {
-            HasExplicitOrder = false;
-        }
+        public void ClearExplicitOrderFlag() { /* no-op: flag is now derived from waypoints */ }
     }
 }

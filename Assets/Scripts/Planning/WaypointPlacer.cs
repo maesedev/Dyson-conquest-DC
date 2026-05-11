@@ -25,7 +25,7 @@ namespace DysonHarvest
         private void Start()
         {
             _gm = GameManager.Instance;
-            _markerMat = new Material(Shader.Find("Universal Render Pipeline/Unlit"));
+            _markerMat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
             _markerMat.color = Color.yellow;
         }
 
@@ -82,7 +82,7 @@ namespace DysonHarvest
             var marker = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             marker.name = "WaypointMarker";
             marker.transform.position = worldPos;
-            marker.transform.localScale = Vector3.one * 0.4f;
+            marker.transform.localScale = Vector3.one * 1.5f;
             Destroy(marker.GetComponent<Collider>());
             marker.GetComponent<MeshRenderer>().material = _markerMat;
 
