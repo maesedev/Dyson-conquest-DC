@@ -19,5 +19,5 @@ MonoBehaviour:
   gravityRadius: 0
   extractionYieldPerPulse: 5
   isHostile: 0
-  planetColor: {r: 0, g: 0, b: 1, a: 1}
+  planetColor: {r: 1, g: 0.13054657, b: 0, a: 1}
   planetScale: 1.8
