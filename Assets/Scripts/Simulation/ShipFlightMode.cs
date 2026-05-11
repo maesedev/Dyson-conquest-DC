@@ -8,9 +8,10 @@ namespace DysonHarvest
         private ShipController _ship;
         private EnergySystem _energySystem;
         private readonly Queue<Vector3> _waypoints = new();
+        private bool _isActive;
 
-        // Set when the player explicitly ordered Flight this pulse; prevents auto-anchor
         public bool HasExplicitOrder { get; private set; }
+        public bool HasWaypoints => _waypoints.Count > 0;
 
         private void Awake()
         {
@@ -22,13 +23,50 @@ namespace DysonHarvest
             _energySystem = FindAnyObjectByType<EnergySystem>();
         }
 
+        // Smooth movement every frame — only during Execution
+        private void Update()
+        {
+            if (!_isActive) return;
+            if (_waypoints.Count == 0) return;
+            if (GameManager.Instance == null) return;
+            if (GameManager.Instance.CurrentPhase != GamePhase.Execution) return;
+
+            Vector3 target  = _waypoints.Peek();
+            Vector3 current = transform.position;
+            // speedUnitsPerPulse interpreted as units/second (pulse interval = 1s)
+            float step = _ship.data.speedUnitsPerPulse * Time.deltaTime;
+
+            Vector3 dir = (target - current).normalized;
+
+            if (Vector3.Distance(current, target) <= step)
+            {
+                transform.position = target;
+                _waypoints.Dequeue();
+            }
+            else
+            {
+                transform.position = current + dir * step;
+            }
+
+            if (dir.sqrMagnitude > 0.001f)
+                transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
+        }
+
+        // Called every pulse (1s): only energy cost, no movement
+        public void OnPulse()
+        {
+            _energySystem.Consume(_ship.data.flightEnergyPerPulse);
+        }
+
         public void Activate()
         {
+            _isActive = true;
             HasExplicitOrder = true;
         }
 
         public void Deactivate()
         {
+            _isActive = false;
             _waypoints.Clear();
             HasExplicitOrder = false;
         }
@@ -44,37 +82,5 @@ namespace DysonHarvest
         {
             HasExplicitOrder = false;
         }
-
-        public void OnPulse()
-        {
-            float cost = _ship.data.flightEnergyPerPulse;
-            _energySystem.Consume(cost);
-
-            if (_waypoints.Count == 0) return;
-
-            Vector3 target = _waypoints.Peek();
-            float step = _ship.data.speedUnitsPerPulse;
-            Vector3 current = transform.position;
-
-            if (Vector3.Distance(current, target) <= step)
-            {
-                transform.position = target;
-                _waypoints.Dequeue();
-            }
-            else
-            {
-                transform.position = current + (target - current).normalized * step;
-            }
-
-            // Orient ship toward movement direction
-            if (_waypoints.Count > 0 || Vector3.Distance(current, target) > 0.01f)
-            {
-                Vector3 dir = (target - current).normalized;
-                if (dir.sqrMagnitude > 0.001f)
-                    transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
-            }
-        }
-
-        public bool HasWaypoints => _waypoints.Count > 0;
     }
 }

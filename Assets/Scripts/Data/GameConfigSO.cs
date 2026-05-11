@@ -6,7 +6,7 @@ namespace DysonHarvest
     public class GameConfigSO : ScriptableObject
     {
         [Header("Pulse")]
-        public float pulseIntervalSeconds = 1.5f;
+        public float pulseIntervalSeconds = 1f;
         public int previewPulseCount = 3;
 
         [Header("Energy")]
